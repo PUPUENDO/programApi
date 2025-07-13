@@ -1,0 +1,37 @@
+<h2>Personajes</h2>
+<div style="margin-bottom: 10px;">
+  <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1">Anterior</button>
+  <span>Página {{ paginaActual }}</span>
+  <button (click)="cambiarPagina(1)" [disabled]="!haySiguiente">Siguiente</button>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Estado</th>
+      <th>Especie</th>
+      <th>Imagen</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let personaje of data; let i = index">
+      <td>{{ personaje.id }}</td>
+      <td>
+        <span *ngIf="!personaje.editando">{{ personaje.name }}</span>
+        <input *ngIf="personaje.editando" [(ngModel)]="personaje.name" />
+      </td>
+      <td>{{ personaje.status }}</td>
+      <td>{{ personaje.species }}</td>
+      <td>
+        <img [src]="personaje.image" alt="{{ personaje.name }}" width="60" height="60" />
+      </td>
+      <td>
+        <button *ngIf="!personaje.editando" (click)="editarPersonaje(i)">Editar</button>
+        <button *ngIf="personaje.editando" (click)="guardarPersonaje(i)">Guardar</button>
+        <button (click)="eliminarPersonaje(i)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
