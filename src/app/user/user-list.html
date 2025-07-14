@@ -1,0 +1,17 @@
+<div class="search-box">
+  <input type="text" [(ngModel)]="search" (input)="filterUsers()" placeholder="Buscar usuario...">
+</div>
+<table class="user-table">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Nombre</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of filteredUsers">
+      <td>{{ user.email }}</td>
+      <td>{{ user.name || 'No disponible' }}</td>
+    </tr>
+  </tbody>
+</table>

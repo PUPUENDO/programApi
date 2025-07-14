@@ -1,10 +1,21 @@
-<h2>Personajes</h2>
-<div style="margin-bottom: 10px;">
-  <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1">Anterior</button>
-  <span>Página {{ paginaActual }}</span>
-  <button (click)="cambiarPagina(1)" [disabled]="!haySiguiente">Siguiente</button>
-</div>
-<table>
+<div style="position: relative; width: 100%;">
+  <div style="width: 100%;">
+    <button (click)="toggleUserInfo()" style="margin-bottom: 16px;">Ver información del usuario</button>
+  </div>
+  <div *ngIf="user && showUserInfo" style="position: absolute; top: 48px; left: 24px; width: 340px; max-width: 95vw; z-index: 10; background: rgba(255,255,255,0.98); box-shadow: 0 2px 8px rgba(0,0,0,0.2); border-radius: 12px;">
+    <app-user [user]="user"></app-user>
+  </div>
+  <div style="width: 100%;">
+    <h2>Personajes</h2>
+    <div style="margin-bottom: 10px;">
+      <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1">Anterior</button>
+      <span>Página {{ paginaActual }}</span>
+      <button (click)="cambiarPagina(1)" [disabled]="!haySiguiente">Siguiente</button>
+    </div>
+    <div style="margin-bottom: 16px;">
+      <input type="text" [(ngModel)]="busqueda" (input)="filtrarPersonajes()" placeholder="Buscar personaje..." style="width: 260px; padding: 6px; border-radius: 6px; border: 1px solid #ccc;" />
+    </div>
+    <table style="width: 100%;">
   <thead>
     <tr>
       <th>ID</th>
@@ -16,29 +27,46 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let personaje of data; let i = index">
+    <tr *ngFor="let personaje of dataFiltrada; let i = index">
       <td>{{ personaje.id }}</td>
       <td>
-        <span *ngIf="!personaje.editando">{{ personaje.name }}</span>
-        <input *ngIf="personaje.editando" [(ngModel)]="personaje.name" />
+        <span>{{ personaje.name }}</span>
       </td>
-      <td>
-        <span *ngIf="!personaje.editando">{{ personaje.status }}</span>
-        <input *ngIf="personaje.editando" [(ngModel)]="personaje.status" />
-      </td>
-      <td>
-        <span *ngIf="!personaje.editando">{{ personaje.species }}</span>
-        <input *ngIf="personaje.editando" [(ngModel)]="personaje.species" />
-      </td>
+      <td>{{ personaje.status }}</td>
+      <td>{{ personaje.species }}</td>
       <td>
         <img [src]="personaje.image" alt="{{ personaje.name }}" width="60" height="60" />
       </td>
       <td>
-        <button *ngIf="!personaje.editando" (click)="editarPersonaje(i)">Editar</button>
-        <button *ngIf="personaje.editando" (click)="guardarPersonaje(i)">Guardar</button>
-        <button (click)="eliminarPersonaje(i)">Eliminar</button>
+        <button title="Mostrar más información" (click)="mostrarPersonaje(personaje)">
+          <span style="font-size: 22px;">🔍</span>
+        </button>
       </td>
     </tr>
+  <div *ngIf="mostrarInfoPersonaje && personajeSeleccionado" style="position: absolute; top: 80px; left: 50%; transform: translateX(-50%); width: 420px; max-width: 95vw; z-index: 20; background: rgba(255,255,255,0.98); box-shadow: 0 2px 8px rgba(0,0,0,0.2); border-radius: 12px;">
+    <div style="padding: 24px;">
+      <h3 style="margin-top:0;">Información del Personaje</h3>
+      <div style="text-align:center; margin-bottom:12px;">
+        <img [src]="personajeSeleccionado.image" alt="{{ personajeSeleccionado.name }}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid #ccc;" />
+      </div>
+      <p><strong>ID:</strong> {{ personajeSeleccionado.id }}</p>
+      <p><strong>Nombre:</strong> <span *ngIf="!personajeSeleccionado.editando">{{ personajeSeleccionado.name }}</span>
+        <input *ngIf="personajeSeleccionado.editando" [(ngModel)]="personajeSeleccionado.name" />
+      </p>
+      <p><strong>Estado:</strong> <span *ngIf="!personajeSeleccionado.editando">{{ personajeSeleccionado.status }}</span>
+        <input *ngIf="personajeSeleccionado.editando" [(ngModel)]="personajeSeleccionado.status" />
+      </p>
+      <p><strong>Especie:</strong> <span *ngIf="!personajeSeleccionado.editando">{{ personajeSeleccionado.species }}</span>
+        <input *ngIf="personajeSeleccionado.editando" [(ngModel)]="personajeSeleccionado.species" />
+      </p>
+      <div style="margin-top:18px; text-align:center;">
+        <button *ngIf="!personajeSeleccionado.editando" (click)="editarPersonajeSeleccionado()">Editar</button>
+        <button *ngIf="personajeSeleccionado.editando" (click)="guardarPersonajeSeleccionado()">Guardar</button>
+        <button (click)="eliminarPersonajeSeleccionado()">Eliminar</button>
+        <button (click)="cerrarPersonaje()">Cerrar</button>
+      </div>
+    </div>
+  </div>
   </tbody>
 </table>
 <div style="margin-top: 10px; text-align: center;">

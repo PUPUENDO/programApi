@@ -1,0 +1,12 @@
+.search-box {
+  margin-bottom: 12px;
+}
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.user-table th, .user-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}

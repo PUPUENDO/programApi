@@ -1,0 +1,8 @@
+<div *ngIf="user" class="user-info">
+  <h3>Información del Usuario</h3>
+  <div style="text-align:center; margin-bottom:12px;">
+    <img *ngIf="user.image" [src]="user.image" alt="Avatar" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid #ccc;" />
+  </div>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+  <p><strong>Nombre:</strong> {{ user.name || 'No disponible' }}</p>
+</div>

@@ -1,12 +1,16 @@
+
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Api } from '../service/api';
+
+import { UserComponent } from '../user/user';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, UserComponent],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -14,16 +18,19 @@ export class Login {
   email: string = '';
   password: string = '';
   error: string = '';
+  user: any = null;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private api: Api, private router: Router) {}
 
   login() {
     this.error = '';
-    this.http.get<any[]>('https://68743fcedd06792b9c937143.mockapi.io/api/users').subscribe(users => {
-      const user = users.find(u => u.email === this.email && u.password === this.password);
+    this.api.getUsers().subscribe(users => {
+      const user = users.find((u: any) => u.email === this.email && u.password === this.password);
       if (user) {
         localStorage.setItem('isLoggedIn', 'true');
-        this.router.navigate(['/home']); // Redirige al home
+        localStorage.setItem('user', JSON.stringify(user));
+        this.user = user;
+        this.router.navigate(['/home']);
       } else {
         this.error = 'Correo o contraseña incorrectos';
         console.log(this.error);
