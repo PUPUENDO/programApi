@@ -22,8 +22,14 @@
         <span *ngIf="!personaje.editando">{{ personaje.name }}</span>
         <input *ngIf="personaje.editando" [(ngModel)]="personaje.name" />
       </td>
-      <td>{{ personaje.status }}</td>
-      <td>{{ personaje.species }}</td>
+      <td>
+        <span *ngIf="!personaje.editando">{{ personaje.status }}</span>
+        <input *ngIf="personaje.editando" [(ngModel)]="personaje.status" />
+      </td>
+      <td>
+        <span *ngIf="!personaje.editando">{{ personaje.species }}</span>
+        <input *ngIf="personaje.editando" [(ngModel)]="personaje.species" />
+      </td>
       <td>
         <img [src]="personaje.image" alt="{{ personaje.name }}" width="60" height="60" />
       </td>
@@ -35,3 +41,8 @@
     </tr>
   </tbody>
 </table>
+<div style="margin-top: 10px; text-align: center;">
+  <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1">Anterior</button>
+  <span>Página {{ paginaActual }}</span>
+  <button (click)="cambiarPagina(1)" [disabled]="!haySiguiente">Siguiente</button>
+</div>
