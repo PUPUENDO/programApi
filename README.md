@@ -161,11 +161,18 @@ filtrarPersonajes() {
   );
 }
 ```
-**La búsqueda no distingue mayúsculas/minúsculas (toLowerCase()).**
+- **La búsqueda no distingue mayúsculas/minúsculas** (`toLowerCase()`).
+- **Se filtra sobre `data` y se actualiza `dataFiltrada`**, que es la que se muestra en el HTML.
+- **No destruye el array original**, lo que permite deshacer el filtro fácilmente.
 
-**Se filtra sobre data y se actualiza dataFiltrada, que es la que se muestra en el HTML.**
+---
+### Explicacion codigo Login.ts
 
-**No destruye el array original, permite deshacer el filtro fácilmente.**
+
+
+
+
+
 ---
 Descripción del programa que hace consumo de APIs
 
