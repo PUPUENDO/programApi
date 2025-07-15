@@ -30,7 +30,7 @@ Esto creará la carpeta `docs` con todo lo necesario para publicar en GitHub Pag
 ## Tecnologías y Frameworks
 
 - **Framework Principal:**  
-  [Angular 14](https://angular.io/) – Construcción de la SPA.
+  [Angular 20](https://angular.io/) – Construcción de la SPA.
 
 - **Lenguaje:**  
   [TypeScript](https://www.typescriptlang.org/) – Desarrollo seguro y tipado.
