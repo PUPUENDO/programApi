@@ -217,9 +217,6 @@ export class Login {
   }
 }
 ```
-## Explicación del código Login.ts
-Por supuesto, aquí tienes la **explicación del código** perfectamente estructurada y en listas, lista para pegar en tu README.md. Utilicé apartados claros, listas anidadas y negritas para que todo quede profesional y muy entendible.
-
 
 ## Explicación del código
 
