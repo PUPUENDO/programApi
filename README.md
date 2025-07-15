@@ -1,59 +1,47 @@
-# ProgramApi
+# ComponentesAn
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.0.
+Aplicación Angular con 15 ejercicios prácticos de Angular Material, cada uno implementado como un componente independiente y seleccionable desde un menú interactivo. Ideal para aprender y mostrar ejemplos de UI modernos y buenas prácticas en Angular.
 
-## Development server
+## ¿Cómo ejecutar este proyecto?
 
-To start a local development server, run:
+1. **Instala las dependencias:**
+   ```bash
+   npm install
+   ```
+2. **Inicia el servidor de desarrollo:**
+   ```bash
+   ng serve
+   ```
+3. **Abre tu navegador en:**
+   [http://localhost:4200/](http://localhost:4200/)
 
-```bash
-ng serve
-```
+La aplicación recargará automáticamente al guardar cambios en los archivos fuente.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## ¿Cómo construir para producción o GitHub Pages?
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+Para generar la versión lista para producción (por ejemplo, para GitHub Pages):
 
 ```bash
-ng build
+ng build --output-path docs --base-href /programApi/
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Esto creará la carpeta `docs` con todo lo necesario para publicar en GitHub Pages.
 
-## Running unit tests
+---
+Descripción del programa que hace consumo de APIs
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Esta aplicación Angular permite gestionar y visualizar personajes consumidos desde una API, con autenticación y funcionalidades interactivas. A continuación se describe el flujo y las principales características, apoyadas en las capturas de la carpeta `public`:
 
-```bash
-ng test
-```
+- **Login (captura0):** Al iniciar, se muestra una pantalla de login donde el usuario ingresa su correo y contraseña. Solo los usuarios registrados pueden acceder a la aplicación.
 
-## Running end-to-end tests
+- **Información del usuario (captura1):** Tras autenticarse, se puede consultar la información del usuario actual haciendo clic en el botón de usuario, que despliega un panel con los datos personales.
 
-For end-to-end (e2e) testing, run:
+- **Vista principal (captura2):** Una vez autenticado, se accede a la vista principal donde se muestra una tabla con los personajes obtenidos de la API. Aquí se pueden ver detalles como nombre, estado, especie e imagen.
 
-```bash
-ng e2e
-```
+- **Controles de gestión (captura3):** Sobre la tabla se encuentran el botón para agregar personajes, la barra de búsqueda y la paginación. El usuario puede buscar personajes por nombre, navegar entre páginas y agregar nuevos personajes localmente.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- **Agregar personaje (captura4):** Al hacer clic en el botón de agregar personaje, se abre una ventana modal donde se pueden ingresar los datos del nuevo personaje. Este personaje se añade solo a la tabla local, sin afectar la API.
 
-## Additional Resources
+- **Detalle de personaje (captura5):** Al hacer clic en el botón de acciones de un personaje, se muestra una ventana con información detallada del personaje, incluyendo campos editables y opciones para editar, guardar, eliminar o cerrar la vista.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+La aplicación está diseñada para ser intuitiva y visualmente atractiva, utilizando Angular Material y buenas prácticas de UI. Permite experimentar con la gestión de datos, autenticación y consumo de APIs, ideal para aprendizaje y demostración.
