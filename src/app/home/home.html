@@ -1,19 +1,52 @@
 <div style="position: relative; width: 100%;">
   <div style="width: 100%;">
-    <button (click)="toggleUserInfo()" style="margin-bottom: 16px;">Ver información del usuario</button>
+    <button (click)="toggleUserInfo()" style="margin-bottom: 16px; display: flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#dd8136" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-square-rounded"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 13a3 3 0 1 0 0 -6a3 3 0 0 0 0 6z" /><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /><path d="M6 20.05v-.05a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v.05" /></svg>
+    </button>
   </div>
   <div *ngIf="user && showUserInfo" style="position: absolute; top: 48px; left: 24px; width: 340px; max-width: 95vw; z-index: 10; background: rgba(255,255,255,0.98); box-shadow: 0 2px 8px rgba(0,0,0,0.2); border-radius: 12px;">
     <app-user [user]="user"></app-user>
   </div>
   <div style="width: 100%;">
     <h2>Personajes</h2>
-    <div style="margin-bottom: 10px;">
-      <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1">Anterior</button>
-      <span>Página {{ paginaActual }}</span>
-      <button (click)="cambiarPagina(1)" [disabled]="!haySiguiente">Siguiente</button>
+    <!-- Paginación eliminada aquí, ya está incluida junto a la barra de búsqueda -->
+    <div style="display: flex; align-items: center; margin-bottom: 16px; gap: 10px; flex-wrap: wrap;">
+      <button (click)="abrirAgregarPersonaje()" style="background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c37332" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-library-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 3m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 7.26a2.005 2.005 0 0 0 -1.012 1.737v10c0 1.1 .9 2 2 2h10c.75 0 1.158 -.385 1.5 -1" /><path d="M11 10h6" /><path d="M14 7v6" /></svg>
+      </button>
+      <input type="text" [(ngModel)]="busqueda" (input)="filtrarPersonajes()" placeholder="Buscar personaje..." style="width: 140px; padding: 5px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px;" />
+      <div style="display: flex; align-items: center; gap: 6px; margin-left: auto;">
+        <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1" style="background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c37332" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-caret-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 6l-6 6l6 6v-12" /></svg>
+        </button>
+        <ng-container *ngFor="let pagina of getPaginasParaMostrar()">
+          <button (click)="irAPagina(pagina)" [disabled]="pagina === paginaActual" style="background: none; border: none; cursor: pointer; padding: 2px 7px; border-radius: 4px; font-weight: bold; color: #c37332; font-size: 15px; min-width: 32px;"
+            [ngStyle]="{ background: pagina === paginaActual ? '#ffe0b2' : 'none', border: pagina === paginaActual ? '1.5px solid #c37332' : 'none' }">
+            {{ pagina }}
+          </button>
+        </ng-container>
+        <button (click)="cambiarPagina(1)" [disabled]="!haySiguiente" style="background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c37332" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-caret-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 18l6 -6l-6 -6v12" /></svg>
+        </button>
+      </div>
     </div>
-    <div style="margin-bottom: 16px;">
-      <input type="text" [(ngModel)]="busqueda" (input)="filtrarPersonajes()" placeholder="Buscar personaje..." style="width: 260px; padding: 6px; border-radius: 6px; border: 1px solid #ccc;" />
+    <!-- Modal para agregar personaje -->
+    <div *ngIf="mostrarAgregarPersonaje" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.25); z-index: 100; display: flex; align-items: center; justify-content: center;">
+      <div style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.18); padding: 32px 24px; min-width: 320px; max-width: 95vw; position: relative;">
+        <h3 style="margin-top:0; margin-bottom: 18px;">Agregar Personaje</h3>
+        <form (ngSubmit)="agregarPersonaje()" style="display: flex; flex-direction: column; gap: 12px;">
+          <input type="text" [(ngModel)]="nuevoPersonaje.name" name="name" placeholder="Nombre" required style="padding: 6px 10px; border-radius: 4px; border: 1px solid #ccc;" />
+          <input type="text" [(ngModel)]="nuevoPersonaje.status" name="status" placeholder="Estado" required style="padding: 6px 10px; border-radius: 4px; border: 1px solid #ccc;" />
+          <input type="text" [(ngModel)]="nuevoPersonaje.species" name="species" placeholder="Especie" required style="padding: 6px 10px; border-radius: 4px; border: 1px solid #ccc;" />
+          <input type="text" [(ngModel)]="nuevoPersonaje.gender" name="gender" placeholder="Género" style="padding: 6px 10px; border-radius: 4px; border: 1px solid #ccc;" />
+          <input type="text" [(ngModel)]="nuevoPersonaje.origin.name" name="origin" placeholder="Origen" style="padding: 6px 10px; border-radius: 4px; border: 1px solid #ccc;" />
+          <input type="text" [(ngModel)]="nuevoPersonaje.image" name="image" placeholder="URL Imagen" style="padding: 6px 10px; border-radius: 4px; border: 1px solid #ccc;" />
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+            <button type="button" (click)="cerrarAgregarPersonaje()" style="background: #bdbdbd; color: #23262b; border: none; border-radius: 4px; padding: 6px 16px; cursor: pointer;">Cancelar</button>
+            <button type="submit" style="background: #3f51b5; color: #fff; border: none; border-radius: 4px; padding: 6px 16px; cursor: pointer;">Agregar</button>
+          </div>
+        </form>
+      </div>
     </div>
     <table style="width: 100%;">
   <thead>
@@ -38,8 +71,8 @@
         <img [src]="personaje.image" alt="{{ personaje.name }}" width="60" height="60" />
       </td>
       <td>
-        <button title="Mostrar más información" (click)="mostrarPersonaje(personaje)">
-          <span style="font-size: 22px;">🔍</span>
+        <button title="Mostrar más información" (click)="mostrarPersonaje(personaje)" style="background: none; border: none; cursor: pointer; padding: 0;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c37332" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
         </button>
       </td>
     </tr>
@@ -47,7 +80,7 @@
     <div style="padding: 24px;">
       <h3 style="margin-top:0;">Información del Personaje</h3>
       <div style="text-align:center; margin-bottom:12px;">
-        <img [src]="personajeSeleccionado.image" alt="{{ personajeSeleccionado.name }}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid #ccc;" />
+        <img [src]="personajeSeleccionado.image" alt="{{ personajeSeleccionado.name }}" style="width:220px; height:220px; border-radius:0; object-fit:cover; border:2px solid #ccc;" />
       </div>
       <p><strong>ID:</strong> {{ personajeSeleccionado.id }}</p>
       <p><strong>Nombre:</strong> <span *ngIf="!personajeSeleccionado.editando">{{ personajeSeleccionado.name }}</span>
@@ -59,6 +92,12 @@
       <p><strong>Especie:</strong> <span *ngIf="!personajeSeleccionado.editando">{{ personajeSeleccionado.species }}</span>
         <input *ngIf="personajeSeleccionado.editando" [(ngModel)]="personajeSeleccionado.species" />
       </p>
+      <p><strong>Género:</strong> <span *ngIf="!personajeSeleccionado.editando">{{ personajeSeleccionado.gender }}</span>
+        <input *ngIf="personajeSeleccionado.editando" [(ngModel)]="personajeSeleccionado.gender" />
+      </p>
+      <p><strong>Origen:</strong> <span *ngIf="!personajeSeleccionado.editando">{{ personajeSeleccionado.origin?.name || personajeSeleccionado.origin }}</span>
+        <input *ngIf="personajeSeleccionado.editando" [(ngModel)]="personajeSeleccionado.origin.name" />
+      </p>
       <div style="margin-top:18px; text-align:center;">
         <button *ngIf="!personajeSeleccionado.editando" (click)="editarPersonajeSeleccionado()">Editar</button>
         <button *ngIf="personajeSeleccionado.editando" (click)="guardarPersonajeSeleccionado()">Guardar</button>
@@ -69,8 +108,17 @@
   </div>
   </tbody>
 </table>
-<div style="margin-top: 10px; text-align: center;">
-  <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1">Anterior</button>
-  <span>Página {{ paginaActual }}</span>
-  <button (click)="cambiarPagina(1)" [disabled]="!haySiguiente">Siguiente</button>
+<div style="margin-top: 18px; display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
+  <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1" style="background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c37332" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-caret-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 6l-6 6l6 6v-12" /></svg>
+  </button>
+  <ng-container *ngFor="let pagina of getPaginasParaMostrar()">
+    <button (click)="irAPagina(pagina)" [disabled]="pagina === paginaActual" style="background: none; border: none; cursor: pointer; padding: 2px 7px; border-radius: 4px; font-weight: bold; color: #c37332; font-size: 15px; min-width: 32px;"
+      [ngStyle]="{ background: pagina === paginaActual ? '#ffe0b2' : 'none', border: pagina === paginaActual ? '1.5px solid #c37332' : 'none' }">
+      {{ pagina }}
+    </button>
+  </ng-container>
+  <button (click)="cambiarPagina(1)" [disabled]="!haySiguiente" style="background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c37332" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-caret-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 18l6 -6l-6 -6v12" /></svg>
+  </button>
 </div>

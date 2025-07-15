@@ -21,6 +21,43 @@ export class Home  implements OnInit {
   busqueda: string = '';
   personajeSeleccionado: any = null;
   mostrarInfoPersonaje: boolean = false;
+  nuevoPersonaje: any = {
+    id: '',
+    name: '',
+    status: '',
+    species: '',
+    gender: '',
+    origin: { name: '' },
+    image: '',
+  };
+  mostrarAgregarPersonaje: boolean = false;
+  abrirAgregarPersonaje() {
+    this.mostrarAgregarPersonaje = true;
+  }
+  cerrarAgregarPersonaje() {
+    this.mostrarAgregarPersonaje = false;
+  }
+  agregarPersonaje() {
+    let maxId = this.data.length > 0 ? Math.max(...this.data.map(p => Number(p.id) || 0)) : 0;
+    const nuevo = {
+      ...this.nuevoPersonaje,
+      id: maxId + 1,
+      editando: false,
+      origin: { name: this.nuevoPersonaje.origin.name }
+    };
+    this.data.unshift(nuevo);
+    this.filtrarPersonajes();
+    this.nuevoPersonaje = {
+      id: '',
+      name: '',
+      status: '',
+      species: '',
+      gender: '',
+      origin: { name: '' },
+      image: '',
+    };
+    this.cerrarAgregarPersonaje();
+  }
 
   constructor(private apiService: Api) {}
 
@@ -110,6 +147,30 @@ export class Home  implements OnInit {
     const nuevaPagina = this.paginaActual + direccion;
     if (nuevaPagina < 1) return;
     this.llenarData(nuevaPagina);
+  }
+
+  irAPagina(pagina: number) {
+    if (pagina < 1 || pagina === this.paginaActual) return;
+    this.llenarData(pagina);
+  }
+
+  getPaginasParaMostrar(): number[] {
+    // Muestra hasta 5 páginas centradas en la actual
+    const paginas: number[] = [];
+    let total = this.paginaActual;
+    // Si hay siguiente, asumimos al menos una más
+    if (this.haySiguiente) {
+      total = this.paginaActual + 1;
+    }
+    let start = Math.max(1, this.paginaActual - 2);
+    let end = Math.max(total, this.paginaActual + 2);
+    if (end - start < 4) {
+      start = Math.max(1, end - 4);
+    }
+    for (let i = start; i <= end; i++) {
+      paginas.push(i);
+    }
+    return paginas;
   }
 
   editarPersonaje(index: number) {
