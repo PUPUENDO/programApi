@@ -168,6 +168,98 @@ filtrarPersonajes() {
 ---
 ### Explicacion codigo Login.ts
 
+Explicación del código (login.ts)
+El componente principal Login gestiona la autenticación de los usuarios. Realiza la validación de credenciales contra la API y, en caso exitoso, almacena la sesión en el localStorage y redirige a la vista principal. Todo el proceso se realiza de forma local, sin servicios externos de autenticación.
+
+```typescript
+// login.ts
+
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Api } from '../service/api';
+
+import { UserComponent } from '../user/user';
+
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, FormsModule, UserComponent],
+  templateUrl: './login.html',
+  styleUrl: './login.css'
+})
+export class Login {
+  email: string = '';
+  password: string = '';
+  error: string = '';
+  user: any = null;
+
+  constructor(private api: Api, private router: Router) {}
+
+  login() {
+    this.error = '';
+    this.api.getUsers().subscribe(users => {
+      const user = users.find((u: any) => u.email === this.email && u.password === this.password);
+      if (user) {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('user', JSON.stringify(user));
+        this.user = user;
+        this.router.navigate(['/home']);
+      } else {
+        this.error = 'Correo o contraseña incorrectos';
+        console.log(this.error);
+      }
+    }, err => {
+      this.error = 'Error al conectar con la API';
+      console.log(this.error);
+    });
+  }
+}
+```
+Explicación del código
+Propiedades principales:
+
+email y password:
+Vínculadas al formulario de inicio de sesión para capturar las credenciales del usuario.
+
+error:
+Almacena los mensajes de error que se mostrarán en la interfaz en caso de credenciales incorrectas o fallos de conexión.
+
+user:
+Almacena temporalmente el usuario autenticado, si el login es exitoso.
+
+Constructor:
+
+Inyecta el servicio Api para obtener los usuarios registrados.
+
+Inyecta el Router de Angular para gestionar la navegación entre rutas.
+
+Método login():
+
+Limpia errores previos asignando una cadena vacía a error.
+
+Solicita la lista de usuarios a través del servicio Api.
+
+Busca un usuario que coincida con el email y password proporcionados.
+
+Si encuentra coincidencia:
+
+Guarda el estado de autenticación en localStorage (isLoggedIn = true).
+
+Almacena la información del usuario en localStorage.
+
+Actualiza la variable local user.
+
+Redirige al usuario a la vista principal (/home).
+
+Si no encuentra coincidencia:
+
+Muestra un mensaje de error: "Correo o contraseña incorrectos".
+
+Si ocurre un error en la petición:
+
+Muestra un mensaje de error: "Error al conectar con la API".
 
 
 
