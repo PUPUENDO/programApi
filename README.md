@@ -37,6 +37,9 @@ Esto creará la carpeta `docs` con todo lo necesario para publicar en GitHub Pag
 
 ---
 
+
+
+
 ### Gestión de Estado
 
 - **NgRx (Store, Effects):**  
@@ -100,6 +103,69 @@ Esto creará la carpeta `docs` con todo lo necesario para publicar en GitHub Pag
     `auth.service.ts` (Valida credenciales y gestiona sesión en `localStorage`)
   - **Guardias de ruta:**  
     `auth.guard.ts` (Protege el acceso a rutas privadas)
+---
+
+###Explicacion del codigo (home.ts)
+El componente principal HomeComponent es el centro de control de la aplicación tras la autenticación. Aquí se gestiona todo el estado y la lógica de la interfaz de forma local, sin librerías de gestión de estado externas como NgRx.
+```typescript
+// home.component.ts
+
+export class Home implements OnInit {
+  data: any[] = [];           // Datos originales de la página actual
+  dataFiltrada: any[] = [];   // Datos que se muestran (filtrados)
+  paginaActual: number = 1;   // Página actual de la API
+  userId: string = '';        // ID del usuario autenticado
+
+  constructor(private apiService: Api) {}
+
+  ngOnInit(): void {
+    this.llenarData(); // 1. Carga personajes al iniciar
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      this.userId = JSON.parse(userStr).id;
+    }
+  }
+
+  llenarData(pagina: number = 1) {
+    this.apiService.getData(pagina).subscribe((response: any) => {
+      // 2. Mapea y agrega bandera 'editando' para el control UI
+      this.data = (response.results || []).map((personaje: any) => ({
+        ...personaje,
+        editando: false
+      }));
+      // 3. Clona los datos originales para el filtrado
+      this.dataFiltrada = [...this.data];
+      // 4. Actualiza el estado de paginación
+      this.haySiguiente = !!response.info?.next;
+      this.paginaActual = pagina;
+    });
+  }
+}
+
+```
+ Búsqueda y Filtrado en Tiempo Real
+La búsqueda se realiza localmente sobre los datos ya cargados, sin peticiones adicionales a la API. El input está vinculado a filtrarPersonajes() que filtra el array según el término buscado.
+
+busqueda: string = '';
+```typescript
+filtrarPersonajes() {
+  const filtro = this.busqueda.trim().toLowerCase();
+  if (!filtro) {
+    this.dataFiltrada = [...this.data];
+    return;
+  }
+  this.dataFiltrada = this.data.filter(p =>
+    p.name.toLowerCase().includes(filtro) ||
+    p.status.toLowerCase().includes(filtro) ||
+    p.species.toLowerCase().includes(filtro)
+  );
+}
+```
+**La búsqueda no distingue mayúsculas/minúsculas (toLowerCase()).**
+
+**Se filtra sobre data y se actualiza dataFiltrada, que es la que se muestra en el HTML.**
+
+**No destruye el array original, permite deshacer el filtro fácilmente.**
 ---
 Descripción del programa que hace consumo de APIs
 
