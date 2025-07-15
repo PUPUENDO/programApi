@@ -1,6 +1,5 @@
-# ComponentesAn
-
-Aplicación Angular con 15 ejercicios prácticos de Angular Material, cada uno implementado como un componente independiente y seleccionable desde un menú interactivo. Ideal para aprender y mostrar ejemplos de UI modernos y buenas prácticas en Angular.
+# ProgramApi
+Esta aplicación Angular permite gestionar y visualizar personajes consumidos desde una API, con autenticación y funcionalidades interactivas.
 
 ## ¿Cómo ejecutar este proyecto?
 
