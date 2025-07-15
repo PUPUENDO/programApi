@@ -143,7 +143,7 @@ export class Home implements OnInit {
 }
 
 ```
- Búsqueda y Filtrado en Tiempo Real
+ ## Búsqueda y Filtrado en Tiempo Real
 La búsqueda se realiza localmente sobre los datos ya cargados, sin peticiones adicionales a la API. El input está vinculado a filtrarPersonajes() que filtra el array según el término buscado.
 
 busqueda: string = '';
