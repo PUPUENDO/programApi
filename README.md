@@ -217,52 +217,64 @@ export class Login {
   }
 }
 ```
-Explicación del código
-Propiedades principales:
-
-email y password:
-Vínculadas al formulario de inicio de sesión para capturar las credenciales del usuario.
-
-error:
-Almacena los mensajes de error que se mostrarán en la interfaz en caso de credenciales incorrectas o fallos de conexión.
-
-user:
-Almacena temporalmente el usuario autenticado, si el login es exitoso.
-
-Constructor:
-
-Inyecta el servicio Api para obtener los usuarios registrados.
-
-Inyecta el Router de Angular para gestionar la navegación entre rutas.
-
-Método login():
-
-Limpia errores previos asignando una cadena vacía a error.
-
-Solicita la lista de usuarios a través del servicio Api.
-
-Busca un usuario que coincida con el email y password proporcionados.
-
-Si encuentra coincidencia:
-
-Guarda el estado de autenticación en localStorage (isLoggedIn = true).
-
-Almacena la información del usuario en localStorage.
-
-Actualiza la variable local user.
-
-Redirige al usuario a la vista principal (/home).
-
-Si no encuentra coincidencia:
-
-Muestra un mensaje de error: "Correo o contraseña incorrectos".
-
-Si ocurre un error en la petición:
-
-Muestra un mensaje de error: "Error al conectar con la API".
+## Explicación del código Login.ts
+Por supuesto, aquí tienes la **explicación del código** perfectamente estructurada y en listas, lista para pegar en tu README.md. Utilicé apartados claros, listas anidadas y negritas para que todo quede profesional y muy entendible.
 
 
+## Explicación del código
 
+### 1. Propiedades principales
+
+* **`email` y `password`:**
+
+  * Vínculadas al formulario de inicio de sesión para capturar las credenciales del usuario.
+* **`error`:**
+
+  * Almacena los mensajes de error que se mostrarán en la interfaz en caso de credenciales incorrectas o fallos de conexión.
+* **`user`:**
+
+  * Almacena temporalmente el usuario autenticado si el login es exitoso.
+
+---
+
+### 2. Constructor
+
+* Inyecta el servicio **`Api`** para obtener la lista de usuarios registrados.
+* Inyecta el **`Router`** de Angular para gestionar la navegación entre rutas de la aplicación.
+
+---
+
+### 3. Método `login()`
+
+* **Limpia errores previos:**
+  Asigna una cadena vacía a `error`.
+* **Solicita la lista de usuarios:**
+  Utiliza el servicio `Api` para obtener los usuarios registrados.
+* **Busca un usuario que coincida:**
+  Compara el `email` y `password` introducidos con los datos obtenidos de la API.
+* **Si encuentra coincidencia:**
+
+  * Guarda el estado de autenticación en **`localStorage`** (`isLoggedIn = true`).
+  * Almacena la información del usuario en **`localStorage`**.
+  * Actualiza la variable local `user`.
+  * Redirige al usuario a la vista principal (`/home`).
+* **Si no encuentra coincidencia:**
+
+  * Muestra un mensaje de error: `"Correo o contraseña incorrectos"`.
+* **Si ocurre un error en la petición:**
+
+  * Muestra un mensaje de error: `"Error al conectar con la API"`.
+
+---
+
+### 4. Notas importantes
+
+* **El login es simulado:**
+  Se basa en una búsqueda local sobre los usuarios traídos de la API, útil para prototipos y pruebas.
+* **No es seguro para producción:**
+  No existe cifrado de contraseñas ni validación en backend.
+* **Uso de `localStorage`:**
+  Permite mantener la sesión mientras la pestaña esté abierta o el almacenamiento no se limpie manualmente.
 
 
 ---
