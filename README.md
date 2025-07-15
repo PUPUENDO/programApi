@@ -105,7 +105,7 @@ Esto creará la carpeta `docs` con todo lo necesario para publicar en GitHub Pag
     `auth.guard.ts` (Protege el acceso a rutas privadas)
 ---
 
-###Explicacion del codigo (home.ts)
+### Explicacion del codigo (home.ts)
 El componente principal HomeComponent es el centro de control de la aplicación tras la autenticación. Aquí se gestiona todo el estado y la lógica de la interfaz de forma local, sin librerías de gestión de estado externas como NgRx.
 ```typescript
 // home.component.ts
