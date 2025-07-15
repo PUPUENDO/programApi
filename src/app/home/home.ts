@@ -38,6 +38,15 @@ export class Home  implements OnInit {
     this.mostrarAgregarPersonaje = false;
   }
   agregarPersonaje() {
+    // Validación visual personalizada
+    this.validacionesAgregar = [];
+    if (!this.nuevoPersonaje.name.trim()) this.validacionesAgregar.push('El nombre es obligatorio.');
+    if (!this.nuevoPersonaje.status.trim()) this.validacionesAgregar.push('El estado es obligatorio.');
+    if (!this.nuevoPersonaje.species.trim()) this.validacionesAgregar.push('La especie es obligatoria.');
+    if (this.validacionesAgregar.length > 0) return;
+
+    if (!window.confirm('¿Seguro que quieres agregar este personaje?')) return;
+
     let maxId = this.data.length > 0 ? Math.max(...this.data.map(p => Number(p.id) || 0)) : 0;
     const nuevo = {
       ...this.nuevoPersonaje,
@@ -58,6 +67,8 @@ export class Home  implements OnInit {
     };
     this.cerrarAgregarPersonaje();
   }
+
+  validacionesAgregar: string[] = [];
 
   constructor(private apiService: Api) {}
 
